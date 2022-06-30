@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :pro do
-    name { "MyString" }
-    address { "MyString" }
-    lat { 1.5 }
-    lng { 1.5 }
-    max_kilometers { 1 }
+    name            { Faker::Name.name }
+    address         { Faker::Address.full_address }
+    lat             { Faker::Address.latitude }
+    lng             { Faker::Address.longitude }
+    max_kilometers  { Faker::Number.between(from: 1, to: 30) }
   end
 end
