@@ -10,13 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_30_181104) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_30_183059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "appointments", force: :cascade do |t|
     t.datetime "starts_at"
     t.datetime "ends_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "booking_prestations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -30,6 +35,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_181104) do
     t.float "lng"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "bookings_prestations", id: false, force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.bigint "prestation_id", null: false
+    t.index ["booking_id"], name: "index_bookings_prestations_on_booking_id"
+    t.index ["prestation_id"], name: "index_bookings_prestations_on_prestation_id"
   end
 
   create_table "opening_hours", force: :cascade do |t|
