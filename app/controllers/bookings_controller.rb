@@ -11,7 +11,7 @@ class BookingsController < ApplicationController
 
   def show
     @booking = Booking.find(params[:id])
-    @matched_pros = MatchPro.new(booking: @booking).call
+    @matched_pros = MatchPro.new(booking: @booking).call.pluck(:name)
   end
 
   private

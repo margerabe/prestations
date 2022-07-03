@@ -10,7 +10,7 @@ class MatchPro
     match_hour
     match_available
 
-    @matched_pros.pluck(:name)
+    @matched_pros
   end
 
   private
@@ -55,14 +55,24 @@ class MatchPro
     @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
+  def match_available
+    excluded_ids = []
+
+    @matched_pros.each do |pro|
+      pro.appointments.each do |appointment|
+        range = appointment.starts_at..appointment.ends_at
+        excluded_ids << pro.id if range.cover?(booking_start_time(@booking))
+      end
+    end
+
+    @matched_pros = @matched_pros.where.not(id: excluded_ids)
+  end
+
   def booking_start_time(booking)
     booking.starts_at.in_time_zone("Europe/Paris")
   end
 
   def booking_end_time(booking, prestation)
     booking_start_time(booking) + prestation.duration.minutes
-  end
-
-  def match_available
   end
 end
