@@ -22,6 +22,7 @@ class MatchPro
   def match_distance
     excluded_ids = []
     @matched_pros.each do |pro|
+      byebug
       distance = Geocoder::Calculations.distance_between(pro, @booking)
       excluded_ids << pro.id if distance > pro.max_kilometers
     end

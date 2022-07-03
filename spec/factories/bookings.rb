@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :booking do
-    email { "MyString" }
-    name { "MyString" }
-    starts_at { "2022-06-30 19:57:08" }
-    address { "MyString" }
-    lat { 1.5 }
-    lng { 1.5 }
+    email       { Faker::Internet.email }
+    name        { Faker::Name.name }
+    starts_at   { Faker::Date.forward(days: 3) }
+    address     { Faker::Address.full_address }
+    lat         { Faker::Address.latitude }
+    lng         { Faker::Address.longitude }
   end
 end
