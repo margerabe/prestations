@@ -6,4 +6,5 @@ class Pro < ApplicationRecord
 
   validates_presence_of :name
   validates :max_kilometers, numericality: { greater_than_or_equal_to: 0 }
+  geocoded_by :address, latitude: :lat, longitude: :lng
 end

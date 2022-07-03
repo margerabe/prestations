@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root to: "pages#home"
-  resources :bookings, only: [:new, :create, :show]
+  root to: "bookings#new"
+  resources :bookings, only: %i[new create show]
 end
