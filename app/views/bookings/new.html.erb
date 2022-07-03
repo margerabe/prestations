@@ -1,12 +1,12 @@
 <div class="container mt-5">
-  <h1 class="text-center">Book a meeting</h1>
+  <h1 class="text-center">Make a booking</h1>
   <div class="mt-3 row justify-content-center">
     <%= simple_form_for @booking do |f| %>
       <%= f.input :email %>
       <%= f.input :name %>
       <%= f.input :starts_at %>
       <%= f.input :address %>
-      <%= f.input :prestation_ids, label: 'Prestations', collection: Prestation.pluck(:reference), input_html: { multiple: true } %>
+      <%= f.input :prestation_ids, label: 'Prestations', collection: @prestation_select, input_html: { multiple: true } %>
       <%= f.submit "Create booking", class: "btn btn-primary" %>
     <% end %>
   </div>

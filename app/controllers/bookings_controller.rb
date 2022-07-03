@@ -1,6 +1,7 @@
 class BookingsController < ApplicationController
   def new
     @booking = Booking.new
+    @prestation_select = Prestation.pluck(:reference)
   end
 
   def create
