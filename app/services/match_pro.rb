@@ -22,6 +22,7 @@ class MatchPro
 
   def match_distance
     excluded_ids = []
+
     @matched_pros.each do |pro|
       distance = Geocoder::Calculations.distance_between(pro, @booking)
       excluded_ids << pro.id if distance > pro.max_kilometers
@@ -43,6 +44,7 @@ class MatchPro
 
   def match_hour
     excluded_ids = []
+
     @booking.prestations.each do |prestation|
       @matched_pros.each do |pro|
         pro_day_hours = pro.opening_hours.find_by(day: @booking_day)
