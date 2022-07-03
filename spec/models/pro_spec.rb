@@ -13,8 +13,8 @@ RSpec.describe Pro, type: :model do
       expect(pro).not_to be_valid
     end
 
-    it 'is invalid with negative max_kilometers below' do
-      pro.max_kilometers = -3
+    it 'is invalid with max_kilometers set to zero' do
+      pro.max_kilometers = 0
       expect(pro).not_to be_valid
     end
   end

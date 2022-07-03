@@ -6,6 +6,7 @@ class BookingsController < ApplicationController
   def create
     @booking = Booking.new(booking_params.except(:prestation_ids))
     @booking.prestation_ids = Prestation.where(reference: params[:booking][:prestation_ids].reject(&:blank?)).pluck(:id)
+
     redirect_to booking_path(@booking) if @booking.save!
   end
 
