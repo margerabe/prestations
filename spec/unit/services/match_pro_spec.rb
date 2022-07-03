@@ -24,9 +24,7 @@ describe MatchPro do
   let(:prestation3) { create(:prestation, reference: 'woman_shampoo', duration: 45) }
   let(:prestation4) { create(:prestation, reference: 'woman_brushing', duration: 60) }
 
-  let(:opening_hour1a) { create(:opening_hour, day: 'monday', starts_at: '10:00', ends_at: "18:00", pro: pro1) }
-  let(:opening_hour1b) { create(:opening_hour, day: 'tuesday', starts_at: '10:00', ends_at: "18:00", pro: pro1) }
-  let(:opening_hour1c) { create(:opening_hour, day: 'wednesday', starts_at: '10:00', ends_at: "18:00", pro: pro1) }
+  let(:opening_hour1) { create(:opening_hour, day: 'tuesday', starts_at: '10:00', ends_at: "18:00", pro: pro1) }
   let(:opening_hour2) { create(:opening_hour, day: 'monday', starts_at: '20:00', ends_at: "22:00", pro: pro2) }
   let(:opening_hour3) { create(:opening_hour, day: 'monday', starts_at: '09:00', ends_at: "19:00", pro: pro3) }
   let(:opening_hour4) { create(:opening_hour, day: 'tuesday', starts_at: '09:00', ends_at: "19:00", pro: pro4) }
@@ -52,9 +50,7 @@ describe MatchPro do
       before do
         booking.prestations << prestation1
 
-        opening_hour1a
-        opening_hour1b
-        opening_hour1c
+        opening_hour1
         opening_hour2
         opening_hour3
         opening_hour5

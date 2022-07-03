@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Prestation, type: :model do
   let(:prestation)  { build(:prestation) }
-  let(:prestation2) { build(:prestation, reference: prestation.reference)}
+  let(:prestation2) { build(:prestation, reference: prestation.reference) }
 
   describe 'Validations' do
     it 'is valid with valid attributes' do

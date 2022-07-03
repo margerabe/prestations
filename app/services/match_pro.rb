@@ -46,9 +46,10 @@ class MatchPro
     @booking.prestations.each do |prestation|
       @matched_pros.each do |pro|
         pro_day_hours = pro.opening_hours.find_by(day: @booking_day)
-        check = (booking_start_time(@booking).strftime("%H:%M") > pro_day_hours.starts_at) && (booking_end_time(@booking,
-                                                                                                                prestation).strftime("%H:%M") < pro_day_hours.ends_at)
-        excluded_ids << pro.id unless check
+        start_time_check = booking_start_time(@booking).strftime("%H:%M") > pro_day_hours.starts_at
+        end_time_check = booking_end_time(@booking, prestation).strftime("%H:%M") < pro_day_hours.ends_at
+
+        excluded_ids << pro.id unless start_time_check && end_time_check
       end
     end
 
