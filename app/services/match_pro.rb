@@ -22,7 +22,6 @@ class MatchPro
   def match_distance
     excluded_ids = []
     @matched_pros.each do |pro|
-      byebug
       distance = Geocoder::Calculations.distance_between(pro, @booking)
       excluded_ids << pro.id if distance > pro.max_kilometers
     end
@@ -31,6 +30,14 @@ class MatchPro
   end
 
   def match_open
+    excluded_ids = []
+    booking_day = @booking.starts_at.strftime("%A").downcase
+
+    @matched_pros.each do |pro|
+      excluded_ids << pro.id unless pro.opening_hours.pluck(:day).include?(booking_day)
+    end
+
+    @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
   def match_available
