@@ -6,10 +6,11 @@ class MatchPro
   def call
     match_prestations
     match_distance
-    match_open
+    match_day
+    match_hour
     match_available
 
-    @matched_pros
+    @matched_pros.pluck(:name)
   end
 
   private
@@ -29,15 +30,37 @@ class MatchPro
     @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
-  def match_open
+  def match_day
     excluded_ids = []
-    booking_day = @booking.starts_at.strftime("%A").downcase
+    @booking_day = @booking.starts_at.strftime("%A").downcase
 
     @matched_pros.each do |pro|
-      excluded_ids << pro.id unless pro.opening_hours.pluck(:day).include?(booking_day)
+      excluded_ids << pro.id unless pro.opening_hours.pluck(:day).include?(@booking_day)
     end
 
     @matched_pros = @matched_pros.where.not(id: excluded_ids)
+  end
+
+  def match_hour
+    excluded_ids = []
+    @booking.prestations.each do |prestation|
+      @matched_pros.each do |pro|
+        pro_day_hours = pro.opening_hours.find_by(day: @booking_day)
+        check = (booking_start_time(@booking).strftime("%H:%M") > pro_day_hours.starts_at) && (booking_end_time(@booking,
+                                                                                                                prestation).strftime("%H:%M") < pro_day_hours.ends_at)
+        excluded_ids << pro.id unless check
+      end
+    end
+
+    @matched_pros = @matched_pros.where.not(id: excluded_ids)
+  end
+
+  def booking_start_time(booking)
+    booking.starts_at.in_time_zone("Europe/Paris")
+  end
+
+  def booking_end_time(booking, prestation)
+    booking_start_time(booking) + prestation.duration.minutes
   end
 
   def match_available
