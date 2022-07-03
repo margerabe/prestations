@@ -28,6 +28,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 2.21'
   gem 'rubocop', '~> 1.31', '>= 1.31.1'
+  gem "bullet"
 end
 
 group :development do

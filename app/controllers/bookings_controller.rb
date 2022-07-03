@@ -5,7 +5,7 @@ class BookingsController < ApplicationController
 
   def create
     @booking = Booking.new(booking_params.except(:prestation_ids))
-    @booking.prestation_ids = Prestation.where(reference: params[:booking][:prestation_ids].reject(&:blank?)).pluck(:id)
+    @booking.prestation_ids = Prestation.where(reference: booking_params[:prestation_ids].reject(&:blank?)).pluck(:id)
 
     redirect_to booking_path(@booking) if @booking.save!
   end
@@ -18,6 +18,6 @@ class BookingsController < ApplicationController
   private
 
   def booking_params
-    params.require(:booking).permit(:email, :name, :starts_at, :address, prestation_references: [])
+    params.require(:booking).permit(:email, :name, :starts_at, :address, prestation_ids: [])
   end
 end
