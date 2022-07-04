@@ -7,7 +7,7 @@ describe MatchPro do
   # Time: next Tuesday, 14:00
 
   # the only pro that matches all criteria
-  let(:pro1)        { create(:pro, name: 'Pro1', address: "14 Rue Moncey, Paris", max_kilometers: 3) }
+  let(:pro1)        { create(:pro, name: 'Pro1', address: "24 Rue Chaptal, Paris", max_kilometers: 3) }
   # will be excluded based on opening hour - day
   let(:pro2)        { create(:pro, name: 'Pro2', address: "26 Rue Chaptal, Paris", max_kilometers: 5) }
   # will be excluded based on distance
