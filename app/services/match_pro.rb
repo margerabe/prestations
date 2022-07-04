@@ -16,8 +16,16 @@ class MatchPro
   private
 
   def match_prestations
+    excluded_ids = []
     booking_refs = @booking.prestations.pluck(:reference)
-    @matched_pros = Pro.joins(:prestations).where(prestations: { reference: booking_refs })
+    pros = Pro.includes(:prestations)
+
+    pros.each do |pro|
+      pro_refs = pro.prestations.pluck(:reference)
+      excluded_ids << pro.id unless (booking_refs - pro_refs).empty?
+    end
+
+    @matched_pros = pros.where.not(id: excluded_ids)
   end
 
   def match_distance
