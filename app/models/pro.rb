@@ -9,4 +9,11 @@ class Pro < ApplicationRecord
 
   geocoded_by :address, latitude: :lat, longitude: :lng
   after_validation :geocode
+
+  scope :has_prestations, lambda { |references:|
+    joins(:prestations)
+      .where(prestations: { reference: references })
+      .group('pros.id')
+      .having("COUNT(prestations.id) >= #{references.length}")
+  }
 end

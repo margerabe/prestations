@@ -41,6 +41,7 @@ describe MatchPro do
     create(:booking, address: "24 Rue Chaptal, Paris",
                      starts_at: next_tuesday)
   end
+  let(:match_prestations) { described_class.new(booking: booking).match_prestations }
   let(:match_pro) { described_class.new(booking: booking).call }
 
   describe '.call' do
@@ -64,7 +65,7 @@ describe MatchPro do
       end
 
       it 'returns the correct pro(s)' do
-        expect(match_pro).to eq([pro1])
+        expect(match_prestations.order(:name)).to eq([pro1, pro2, pro3, pro5, pro6])
       end
     end
   end
