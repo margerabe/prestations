@@ -28,6 +28,8 @@ describe MatchPro do
 
   let!(:opening_hour1) { create(:opening_hour, day: 'tuesday', starts_at: '10:00', ends_at: "18:00", pro: pro1) }
   let!(:opening_hour2) { create(:opening_hour, day: 'monday', starts_at: '20:00', ends_at: "22:00", pro: pro2) }
+  let!(:opening_hour3) { create(:opening_hour, day: 'tuesday', starts_at: '20:00', ends_at: "22:00", pro: pro3) }
+  let!(:opening_hour4) { create(:opening_hour, day: 'tuesday', starts_at: '20:00', ends_at: "22:00", pro: pro4) }
   let!(:opening_hour5) { create(:opening_hour, day: 'tuesday', starts_at: '21:00', ends_at: "23:00", pro: pro5) }
   let!(:opening_hour6) { create(:opening_hour, day: 'tuesday', starts_at: '09:00', ends_at: "19:00", pro: pro6) }
 
@@ -45,6 +47,7 @@ describe MatchPro do
 
   let(:match_prestations)   { described_class.new(booking: booking).match_prestations }
   let(:match_distance)      { described_class.new(booking: booking).match_distance }
+  let(:match_day)           { described_class.new(booking: booking).match_day }
   let(:match_pro) { described_class.new(booking: booking).call }
 
   before do
@@ -70,6 +73,14 @@ describe MatchPro do
     context 'with correct parameters' do
       it 'returns the correct pro(s)' do
         match_distance.should match_array(pros.reject{ _1 == pro3 })
+      end
+    end
+  end
+
+  describe '.match_day' do
+    context 'with correct parameters' do
+      it 'returns the correct pro(s)' do
+        match_day.should match_array(pros.reject{ _1 == pro2 })
       end
     end
   end

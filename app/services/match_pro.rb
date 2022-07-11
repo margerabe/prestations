@@ -41,14 +41,15 @@ class MatchPro
   end
 
   def match_day
-    excluded_ids = []
     @booking_day = @booking.starts_at.strftime("%A").downcase
+    @matched_pros = Pro.available_at(day: @booking_day)
 
-    @matched_pros.each do |pro|
-      excluded_ids << pro.id unless pro.opening_hours.pluck(:day).include?(@booking_day)
-    end
-
-    @matched_pros = @matched_pros.where.not(id: excluded_ids)
+    # Ruby way (slower)
+    # excluded_ids = []
+    # @matched_pros.each do |pro|
+    #   excluded_ids << pro.id unless pro.opening_hours.pluck(:day).include?(@booking_day)
+    # end
+    # @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
   def match_hour

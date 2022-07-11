@@ -16,4 +16,9 @@ class Pro < ApplicationRecord
       .group('pros.id')
       .having("COUNT(prestations.id) >= #{references.length}")
   }
+
+  scope :available_at, lambda { |day:|
+    includes(:opening_hours)
+      .where(opening_hours: { day: day })
+  }
 end
