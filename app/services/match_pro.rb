@@ -14,12 +14,11 @@ class MatchPro
   end
 
   def match_prestations
-    excluded_ids = []
     booking_refs = @booking.prestations.pluck(:reference)
-
     @matched_pros = Pro.has_prestations(references: booking_refs)
 
     # Ruby way (slower)
+    # excluded_ids = []
     # pros = Pro.includes(:prestations)
     # pros.each do |pro|
     #   pro_refs = pro.prestations.pluck(:reference)
@@ -29,14 +28,16 @@ class MatchPro
   end
 
   def match_distance
-    excluded_ids = []
+    @matched_pros = Pro.near(@booking, :max_kilometers, units: :km)
 
-    @matched_pros.each do |pro|
-      distance = Geocoder::Calculations.distance_between(pro, @booking)
-      excluded_ids << pro.id if distance > pro.max_kilometers
-    end
-
-    @matched_pros = @matched_pros.where.not(id: excluded_ids)
+    # Ruby way (slower)
+    # excluded_ids = []
+    # Pro.where(Geocoder::Calculations.distance_between(pro, @booking) > pros.max_kilometers)
+    # @matched_pros.each do |pro|
+    #   distance = Geocoder::Calculations.distance_between(pro, @booking)
+    #   excluded_ids << pro.id if distance > pro.max_kilometers
+    # end
+    # @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
   def match_day
