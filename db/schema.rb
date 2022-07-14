@@ -82,4 +82,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_174859) do
     t.check_constraint "max_kilometers > 0", name: "max_kilometers_check"
   end
 
+  add_foreign_key "appointments", "pros"
+  add_foreign_key "opening_hours", "pros"
 end
