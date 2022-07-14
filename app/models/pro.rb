@@ -17,8 +17,14 @@ class Pro < ApplicationRecord
       .having("COUNT(prestations.id) >= #{references.length}")
   }
 
-  scope :available_at, lambda { |day:|
+  scope :open_at, lambda { |day:|
     joins(:opening_hours)
       .where(opening_hours: { day: day })
+  }
+
+  scope :available_at, lambda { |start_time:, end_time:|
+    joins(:appointments)
+      .where('appointments.starts_at NOT BETWEEN ? AND ?', start_time, end_time)
+      .where('appointments.ends_at NOT BETWEEN ? AND ?', start_time, end_time)
   }
 end

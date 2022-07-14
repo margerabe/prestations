@@ -38,6 +38,10 @@ describe MatchPro do
     (Date.today.next_occurring(:wednesday).beginning_of_day + 14.hours).in_time_zone("Europe/Paris")
   end
   let!(:appointment1)  { create(:appointment, starts_at: next_wednesday, ends_at: next_wednesday + 1.hour, pro: pro1) }
+  let!(:appointment2)  { create(:appointment, starts_at: next_wednesday, ends_at: next_wednesday + 1.hour, pro: pro2) }
+  let!(:appointment3)  { create(:appointment, starts_at: next_wednesday, ends_at: next_wednesday + 1.hour, pro: pro3) }
+  let!(:appointment4)  { create(:appointment, starts_at: next_wednesday, ends_at: next_wednesday + 1.hour, pro: pro4) }
+  let!(:appointment5)  { create(:appointment, starts_at: next_wednesday, ends_at: next_wednesday + 1.hour, pro: pro5) }
   let!(:appointment6)  { create(:appointment, starts_at: next_tuesday, ends_at: next_tuesday + 2.hours, pro: pro6) }
 
   let(:booking) do
@@ -48,6 +52,7 @@ describe MatchPro do
   let(:match_prestations)   { described_class.new(booking: booking).match_prestations }
   let(:match_distance)      { described_class.new(booking: booking).match_distance }
   let(:match_day)           { described_class.new(booking: booking).match_day }
+  let(:match_available)     { described_class.new(booking: booking).match_available }
   let(:match_pro) { described_class.new(booking: booking).call }
 
   before do
@@ -81,6 +86,14 @@ describe MatchPro do
     context 'with correct parameters' do
       it 'returns the correct pro(s)' do
         match_day.should match_array(pros.reject{ _1 == pro2 })
+      end
+    end
+  end
+
+  describe '.match_available' do
+    context 'with correct parameters' do
+      it 'returns the correct pro(s)' do
+        match_available.should match_array(pros.reject{ _1 == pro6 })
       end
     end
   end

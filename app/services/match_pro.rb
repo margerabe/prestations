@@ -24,7 +24,7 @@ class MatchPro
 
   def match_day
     @booking_day = @booking.starts_at.strftime("%A").downcase
-    @matched_pros = Pro.available_at(day: @booking_day)
+    @matched_pros = Pro.open_at(day: @booking_day)
   end
 
   def match_hour
@@ -44,25 +44,16 @@ class MatchPro
   end
 
   def match_available
-    excluded_ids = []
-
-    @matched_pros.each do |pro|
-      pro.appointments.each do |appointment|
-        range = appointment.starts_at..appointment.ends_at
-        excluded_ids << pro.id if range.cover?(booking_start_time(@booking))
-      end
-    end
-
-    @matched_pros = @matched_pros.where.not(id: excluded_ids)
+    Pro.available_at(start_time: booking_start_time, end_time: booking_end_time)
   end
 
   private
 
-  def booking_start_time(booking)
-    booking.starts_at.in_time_zone("Europe/Paris")
+  def booking_start_time
+    @booking.starts_at.in_time_zone("Europe/Paris")
   end
 
-  def booking_end_time(booking, prestation)
-    booking_start_time(booking) + prestation.duration.minutes
+  def booking_end_time
+    booking_start_time + @booking.prestations.sum(&:duration).minutes
   end
 end
