@@ -45,7 +45,7 @@ class MatchPro
     booking_start_time + @booking.prestations.sum(&:duration).minutes
   end
 
-  def to_time(d)
-    Time.new(2000, 1, 1, d.hour, d.min, d.sec)
+  def to_time(date)
+    Time.new(2000, 1, 1, date.hour, date.min, date.sec)
   end
 end
