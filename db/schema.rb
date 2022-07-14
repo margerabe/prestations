@@ -48,8 +48,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_174859) do
 
   create_table "opening_hours", force: :cascade do |t|
     t.string "day"
-    t.string "starts_at"
-    t.string "ends_at"
+    t.time "starts_at"
+    t.time "ends_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "pro_id"

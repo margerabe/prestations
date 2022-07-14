@@ -1,53 +1,41 @@
 class MatchPro
-  def initialize(booking:)
+  def initialize(booking:, method_spec: false)
     @booking = booking
+    @method_spec = method_spec
   end
 
   def call
-    match_prestations
     match_distance
-    match_day
-    match_hour
+    match_prestations
+    match_opening_hour
     match_available
-
-    @matched_pros
-  end
-
-  def match_prestations
-    booking_refs = @booking.prestations.pluck(:reference)
-    @matched_pros = Pro.has_prestations(references: booking_refs)
   end
 
   def match_distance
     @matched_pros = Pro.near(@booking, :max_kilometers, units: :km)
   end
 
-  def match_day
-    @booking_day = @booking.starts_at.strftime("%A").downcase
-    @matched_pros = Pro.open_at(day: @booking_day)
+  def match_prestations
+    booking_refs = @booking.prestations.pluck(:reference)
+    @matched_pros = pro_collection.has_prestations(references: booking_refs)
   end
 
-  def match_hour
-    excluded_ids = []
-
-    @booking.prestations.each do |prestation|
-      @matched_pros.each do |pro|
-        pro_day_hours = pro.opening_hours.find_by(day: @booking_day)
-        start_time_check = booking_start_time(@booking).strftime("%H:%M") > pro_day_hours.starts_at.to_datetime
-        end_time_check = booking_end_time(@booking, prestation).strftime("%H:%M") < pro_day_hours.ends_at.to_datetime
-
-        excluded_ids << pro.id unless start_time_check && end_time_check
-      end
-    end
-
-    @matched_pros = @matched_pros.where.not(id: excluded_ids)
+  def match_opening_hour
+    @booking_day = @booking.starts_at.strftime("%A").downcase
+    @matched_pros = pro_collection.open_at(day: @booking_day, start_time: to_time(booking_start_time),
+                                           end_time: to_time(booking_end_time))
   end
 
   def match_available
-    Pro.available_at(start_time: booking_start_time, end_time: booking_end_time)
+    @matched_pros = pro_collection.available_at(start_time: booking_start_time, end_time: booking_end_time)
   end
 
   private
+
+  def pro_collection
+    # Check if we are testing an individual method from the spec or full suite
+    @method_spec ? Pro : @matched_pros
+  end
 
   def booking_start_time
     @booking.starts_at.in_time_zone("Europe/Paris")
@@ -55,5 +43,9 @@ class MatchPro
 
   def booking_end_time
     booking_start_time + @booking.prestations.sum(&:duration).minutes
+  end
+
+  def to_time(d)
+    Time.new(2000, 1, 1, d.hour, d.min, d.sec)
   end
 end
