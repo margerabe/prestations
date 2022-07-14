@@ -84,4 +84,12 @@ describe MatchPro do
       end
     end
   end
+
+  describe '.call' do
+    context 'with correct parameters' do
+      it 'returns the correct pro(s)' do
+        expect(match_pro).to eq([pro1])
+      end
+    end
+  end
 end

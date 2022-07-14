@@ -18,7 +18,7 @@ class Pro < ApplicationRecord
   }
 
   scope :available_at, lambda { |day:|
-    includes(:opening_hours)
+    joins(:opening_hours)
       .where(opening_hours: { day: day })
   }
 end

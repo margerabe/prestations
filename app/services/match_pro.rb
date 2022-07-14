@@ -16,40 +16,15 @@ class MatchPro
   def match_prestations
     booking_refs = @booking.prestations.pluck(:reference)
     @matched_pros = Pro.has_prestations(references: booking_refs)
-
-    # Ruby way (slower)
-    # excluded_ids = []
-    # pros = Pro.includes(:prestations)
-    # pros.each do |pro|
-    #   pro_refs = pro.prestations.pluck(:reference)
-    #   excluded_ids << pro.id unless (booking_refs - pro_refs).empty?
-    # end
-    # @matched_pros = pros.where.not(id: excluded_ids)
   end
 
   def match_distance
     @matched_pros = Pro.near(@booking, :max_kilometers, units: :km)
-
-    # Ruby way (slower)
-    # excluded_ids = []
-    # Pro.where(Geocoder::Calculations.distance_between(pro, @booking) > pros.max_kilometers)
-    # @matched_pros.each do |pro|
-    #   distance = Geocoder::Calculations.distance_between(pro, @booking)
-    #   excluded_ids << pro.id if distance > pro.max_kilometers
-    # end
-    # @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
   def match_day
     @booking_day = @booking.starts_at.strftime("%A").downcase
     @matched_pros = Pro.available_at(day: @booking_day)
-
-    # Ruby way (slower)
-    # excluded_ids = []
-    # @matched_pros.each do |pro|
-    #   excluded_ids << pro.id unless pro.opening_hours.pluck(:day).include?(@booking_day)
-    # end
-    # @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
   def match_hour
@@ -58,8 +33,8 @@ class MatchPro
     @booking.prestations.each do |prestation|
       @matched_pros.each do |pro|
         pro_day_hours = pro.opening_hours.find_by(day: @booking_day)
-        start_time_check = booking_start_time(@booking).strftime("%H:%M") > pro_day_hours.starts_at
-        end_time_check = booking_end_time(@booking, prestation).strftime("%H:%M") < pro_day_hours.ends_at
+        start_time_check = booking_start_time(@booking).strftime("%H:%M") > pro_day_hours.starts_at.to_datetime
+        end_time_check = booking_end_time(@booking, prestation).strftime("%H:%M") < pro_day_hours.ends_at.to_datetime
 
         excluded_ids << pro.id unless start_time_check && end_time_check
       end
