@@ -56,6 +56,8 @@ class MatchPro
     @matched_pros = @matched_pros.where.not(id: excluded_ids)
   end
 
+  private
+
   def booking_start_time(booking)
     booking.starts_at.in_time_zone("Europe/Paris")
   end
