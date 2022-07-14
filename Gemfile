@@ -9,8 +9,9 @@ gem "puma", "~> 5.0"
 gem "autoprefixer-rails"
 gem "bootsnap", require: false
 gem "font-awesome-sass", "~> 6.1"
-gem 'geocoder', '~> 1.8'
+gem 'geokit-rails', '~> 2.3', '>= 2.3.2'
 gem "jbuilder"
+gem "httparty"
 gem "jsbundling-rails"
 gem "redis", "~> 4.0"
 gem "sassc-rails"

@@ -5,6 +5,16 @@ class Booking < ApplicationRecord
   validates_presence_of :name
   validates :email, format: { with: /\A^[A-Za-z0-9+_.-]+@(.+)$\z/ }
 
-  geocoded_by :address, latitude: :lat, longitude: :lng
-  after_validation :geocode
+  after_create :geocode
+  acts_as_mappable lat_column_name: :lat,
+                   lng_column_name: :lng
+
+  private
+
+  def geocode
+    response = GeocodingService.new(address).call
+    self.lat = response[:lat]
+    self.lng = response[:lng]
+    save
+  end
 end

@@ -12,7 +12,7 @@ class MatchPro
   end
 
   def match_distance
-    @matched_pros = Pro.near(@booking, :max_kilometers, units: :km)
+    @matched_pros = Pro.where(Pro.distance_sql(@booking, :kms) + " < max_kilometers")
   end
 
   def match_prestations

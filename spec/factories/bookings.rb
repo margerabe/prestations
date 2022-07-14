@@ -4,7 +4,5 @@ FactoryBot.define do
     name        { Faker::Name.name }
     starts_at   { Faker::Date.forward(days: 3) }
     address     { Faker::Address.full_address }
-    lat         { Faker::Address.latitude }
-    lng         { Faker::Address.longitude }
   end
 end

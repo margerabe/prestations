@@ -7,8 +7,9 @@ class Pro < ApplicationRecord
   validates_presence_of :name
   validates :max_kilometers, numericality: { greater_than: 0 }
 
-  geocoded_by :address, latitude: :lat, longitude: :lng
-  after_validation :geocode
+  after_create :geocode
+  acts_as_mappable lat_column_name: :lat,
+                   lng_column_name: :lng
 
   scope :has_prestations, lambda { |references:|
     joins(:prestations)
@@ -28,4 +29,13 @@ class Pro < ApplicationRecord
       .where('appointments.starts_at NOT BETWEEN ? AND ?', start_time, end_time)
       .where('appointments.ends_at NOT BETWEEN ? AND ?', start_time, end_time)
   }
+
+  private
+
+  def geocode
+    response = GeocodingService.new(address).call
+    self.lat = response[:lat]
+    self.lng = response[:lng]
+    save
+  end
 end
