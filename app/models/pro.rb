@@ -15,7 +15,7 @@ class Pro < ApplicationRecord
     joins(:prestations)
       .where(prestations: { reference: references })
       .group('pros.id')
-      .having("COUNT(prestations.id) >= #{references.length}")
+      .having("COUNT(prestations.id) = #{references.length}")
   }
 
   scope :open_at, lambda { |day:, start_time:, end_time:|
