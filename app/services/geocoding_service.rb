@@ -7,12 +7,13 @@ class GeocodingService
   end
 
   def call
-    response = self.class.get("/search", query: {q: @address, limit: 1}).dig("features")&.first
+    response = self.class.get("/search", query: { q: @address, limit: 1 })["features"]&.first
     return {} if response.nil?
+
     coordinates = response.dig("geometry", "coordinates")
     {
       lat: coordinates.second,
       lng: coordinates.first
-    }.merge(response.dig("properties").transform_keys(&:to_sym))
+    }.merge(response["properties"].transform_keys(&:to_sym))
   end
 end

@@ -23,11 +23,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_174859) do
     t.index ["pro_id"], name: "index_appointments_on_pro_id"
   end
 
-  create_table "booking_prestations", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "bookings", force: :cascade do |t|
     t.string "email"
     t.string "name"
@@ -39,7 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_174859) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "bookings_prestations", force: :cascade do |t|
+  create_table "bookings_prestations", id: false, force: :cascade do |t|
     t.bigint "booking_id", null: false
     t.bigint "prestation_id", null: false
     t.index ["booking_id"], name: "index_bookings_prestations_on_booking_id"
@@ -64,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_03_174859) do
     t.index ["reference"], name: "index_prestations_on_reference", unique: true
   end
 
-  create_table "prestations_pros", force: :cascade do |t|
+  create_table "prestations_pros", id: false, force: :cascade do |t|
     t.bigint "pro_id", null: false
     t.bigint "prestation_id", null: false
     t.index ["prestation_id"], name: "index_prestations_pros_on_prestation_id"
