@@ -5,7 +5,7 @@
 Runs on Ruby 3.0.3 / Rails 7.0.3 (Webpack) / PostgreSQL DB
 
 - `bundle install` / `rails db:create db:migrate db:seed`
-- Ensure you have Bootstrap and it's dependencies: `yarn add bootstrap @popperjs/core`
+- Ensure you have Bootstrap and its dependencies: `yarn add bootstrap @popperjs/core`
 - `rails s` --> `localhost:3000` to make a booking
 
 <h2>About the project</h2>
